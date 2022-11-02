@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using lab03.Models;
 using System.Net.Http.Headers;
+using System.Net;
 
 namespace lab03.Controllers;
 
@@ -9,13 +10,16 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _clientFactory;
 
     public HomeController(
         ILogger<HomeController> logger,
-        HttpClient httpClient)
+        HttpClient httpClient,
+        IHttpClientFactory clientFactory)
     {
         _logger = logger;
         _httpClient = httpClient;
+        _clientFactory = clientFactory;
     }
 
     public IActionResult Index()
@@ -34,12 +38,20 @@ public class HomeController : Controller
         _httpClient.DefaultRequestHeaders.Add("accept","application/json");
         var response = await _httpClient.PostAsJsonAsync(url,param);
         var message = await response.Content.ReadFromJsonAsync<AuthResponse>();
+        HttpContext.Session.SetString("Token",message.Access_token);
         ViewBag.message = message;
 
         var userGetUrl = "https://api.github.com/user";
-        _httpClient.DefaultRequestHeaders.Add("Authorization",$"Bearer {message.Access_token}");
-        var resp = await _httpClient.GetAsync(userGetUrl);
-        var mess = await resp.Content.ReadFromJsonAsync<dynamic>();
+        var request = new HttpRequestMessage(HttpMethod.Get,userGetUrl);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer",message.Access_token);
+        request.Headers.UserAgent.TryParseAdd("request");
+        
+        var client = _clientFactory.CreateClient();
+        var resp = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+        if(resp.StatusCode == HttpStatusCode.OK) {
+            var apiString = await resp.Content.ReadAsStringAsync();
+            ViewBag.scope = apiString;
+        }
         return View();
     }
 
