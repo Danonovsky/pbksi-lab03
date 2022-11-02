@@ -1,0 +1,3 @@
+Client ID: 9b088fd1b8e53b515c05
+Client Secret: fc08b57954763fb0e9abdb5d25d8391fd79d34d3
+App Name: lab03-pbksi
