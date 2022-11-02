@@ -40,10 +40,16 @@ public class HomeController : Controller
         var message = await response.Content.ReadFromJsonAsync<AuthResponse>();
         HttpContext.Session.SetString("Token",message.Access_token);
         ViewBag.message = message;
+        return RedirectToAction("Profile");
+    }
 
+    public async Task<IActionResult> Profile()
+    {
+        var token = HttpContext.Session.GetString("Token");
+        if(token is null) return RedirectToAction("Error");
         var userGetUrl = "https://api.github.com/user";
         var request = new HttpRequestMessage(HttpMethod.Get,userGetUrl);
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer",message.Access_token);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer",HttpContext.Session.GetString("Token"));
         request.Headers.UserAgent.TryParseAdd("request");
         
         var client = _clientFactory.CreateClient();
@@ -52,11 +58,6 @@ public class HomeController : Controller
             var apiString = await resp.Content.ReadAsStringAsync();
             ViewBag.scope = apiString;
         }
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
         return View();
     }
 

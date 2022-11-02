@@ -16303,6 +16303,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\DanonLaptop\\Documents\\UPH\\PBKSI\\lab03\\Views\\Home\\Profile.cshtml",
+      "TargetPath": "Views\\Home\\Profile.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\DanonLaptop\\Documents\\UPH\\PBKSI\\lab03\\Views\\Shared\\Error.cshtml",
       "TargetPath": "Views\\Shared\\Error.cshtml",
       "FileKind": "mvc"
@@ -16320,11 +16325,6 @@
     {
       "FilePath": "c:\\Users\\DanonLaptop\\Documents\\UPH\\PBKSI\\lab03\\Views\\Home\\Index.cshtml",
       "TargetPath": "Views\\Home\\Index.cshtml",
-      "FileKind": "mvc"
-    },
-    {
-      "FilePath": "c:\\Users\\DanonLaptop\\Documents\\UPH\\PBKSI\\lab03\\Views\\Home\\Privacy.cshtml",
-      "TargetPath": "Views\\Home\\Privacy.cshtml",
       "FileKind": "mvc"
     },
     {
